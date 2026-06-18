@@ -1,0 +1,70 @@
+##Im working on pycharm and I dont know how to connect that to this so, I'll be adding the code here every once in a while manually along with some update changes. 
+
+import pygame
+import math
+pygame.init()
+
+screen = pygame.display.set_mode((800, 600))
+pygame.display.set_caption("Orbit Simulator")
+trailScreen = pygame.Surface(screen.get_size())
+time = pygame.time.Clock()
+
+running = True
+
+x_center = 400
+y_center = 300
+radius = 80
+mini = 10
+maxi = 100
+GRAV_CON = 1900 ## gravity constant :sob:
+
+InOrbit = [
+    [500, 200, 3, 3],
+    [500, 200, 2, 2]
+]
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    pygame.draw.circle(screen, (0, 105, 255), (400, 300), 50, 0)
+    pygame.draw.circle(screen, (0, 105, 255), (400, 300), 80, 5)
+
+    for i in InOrbit:
+        x = i[0]
+        y = i[1]
+        vx = i[2]
+        vy = i[3]
+
+        dx = x_center - x ## X vector
+        dy = y_center - y ## Y vector
+
+        r = math.sqrt(dx ** 2 + dy ** 2) ## distance
+
+        GravStr = GRAV_CON / (r ** 2) ## gravity strength
+
+        x_dir = dx / r ## x direction
+        y_dir = dy / r ## y direction
+
+        ax = GravStr * x_dir ## acceleration x
+        ay = GravStr * y_dir ## acceleration y
+
+        vx += ax ## velocity X
+        vy += ay ## velocity Y
+
+        x += vx ## final X calculation
+        y += vy ## final Y calculation
+
+        i[0] = x
+        i[1] = y
+        i[2] = vx
+        i[3] = vy
+
+        pygame.draw.circle(screen, (255, 0, 0), (x, y), 8, 0)
+
+    pygame.display.flip()
+    trailScreen.set_alpha(2)
+    trailScreen.fill((0, 0, 0))
+    screen.blit(trailScreen, (0, 0))
+    time.tick(60)
