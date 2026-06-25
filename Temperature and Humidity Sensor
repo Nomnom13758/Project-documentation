@@ -1,0 +1,43 @@
+// Arduino Uno R3 temperature and humidity sensor. 
+
+#include <LiquidCrystal.h>
+#include <DHT.h>
+
+#define DHTPIN 8
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+
+LiquidCrystal lcd(7, 6, 5, 4, 3, 2);
+
+
+void setup() {
+
+  dht.begin();
+  lcd.begin(16, 2);
+}
+
+
+void loop() {
+  float temperature = dht.readTemperature();
+  float FTemp = (temperature * 1.8) + 32;
+  float humidity = dht.readHumidity();
+
+  lcd.setCursor(0, 0);
+  lcd.print("                ");
+  lcd.setCursor(0, 0);
+
+
+  lcd.print("Temp: ");
+  lcd.print(FTemp);
+  lcd.print(" F");
+
+
+  lcd.setCursor(0, 1);
+  lcd.print("Humidity: ");
+   lcd.print(humidity);
+  lcd.print(" %");
+
+  delay(2000);
+}
